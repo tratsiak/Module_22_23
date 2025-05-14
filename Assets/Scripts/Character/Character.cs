@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AgentCharacter : MonoBehaviour
+public class Character : MonoBehaviour
 {
     [SerializeField] private float _rotationSpeed;
+    [SerializeField] private float _maxHealth;
+
+    private HealthController _healthController;
 
     private NavMeshAgent _agent;
 
@@ -11,12 +14,19 @@ public class AgentCharacter : MonoBehaviour
 
     private Vector3 _targetPosition;
 
+    public float Health => _healthController.CurrentHealth;
+
+    public float MaxHealth => _healthController.MaxHealth;
+
+    public Vector3 CurrentVelocity => _agent.velocity;
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _agent.updateRotation = false;
 
         _rotator = new DirectionalRotation(transform, _rotationSpeed);
+        _healthController = new HealthController(_maxHealth);
 
         _targetPosition = transform.position;
     }
