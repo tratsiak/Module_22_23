@@ -1,9 +1,9 @@
-public class HealthController
+public class Health
 {
     private float _maxHealth;
     private float _currentHealth;
 
-    public HealthController(float maxHealth)
+    public Health(float maxHealth)
     {
         _maxHealth = maxHealth;
 

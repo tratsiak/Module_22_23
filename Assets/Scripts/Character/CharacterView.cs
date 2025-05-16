@@ -1,13 +1,14 @@
 using UnityEngine;
 
-public class CharacterViewController : MonoBehaviour
+public class CharacterView : MonoBehaviour
 {
     private const int MinPercentToChangeAnimation = 30;
     private const int InjuredLayerIndex = 1;
     private const float TimeToEndReactionAnimation = 1.7f;
-    private const string IsRunningAnimationKey = "IsRunning";
-    private const string IsReactionAnimationKey = "IsDamaged";
-    private const string IsDiedAnimationKey = "IsDied";
+
+    private readonly int _isRunningHash = Animator.StringToHash("IsRunning");
+    private readonly int _isReactionHash = Animator.StringToHash("IsDamaged");
+    private readonly int _isDiedHash = Animator.StringToHash("IsDied");
 
     [SerializeField] private ControlHub _controlHub;
 
@@ -15,20 +16,9 @@ public class CharacterViewController : MonoBehaviour
 
     [SerializeField] private Character _character;
 
-    private int _isRunningHash;
-    private int _isReactionHash;
-    private int _isDiedHash;
-
     private float _time;
 
     private bool _isReactionAnimationPlayed;
-
-    private void Awake()
-    {
-        _isRunningHash = Animator.StringToHash(IsRunningAnimationKey);
-        _isReactionHash = Animator.StringToHash(IsReactionAnimationKey);
-        _isDiedHash = Animator.StringToHash(IsDiedAnimationKey);
-    }
 
     private void Update()
     {

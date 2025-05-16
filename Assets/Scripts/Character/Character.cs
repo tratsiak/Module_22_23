@@ -3,22 +3,27 @@ using UnityEngine.AI;
 
 public class Character : MonoBehaviour, IDamagable
 {
+    private const float MinDistanceToPointer = 0.1f;
+
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _maxHealth;
 
-    [SerializeField] private CharacterViewController _characterViewController;
+    [SerializeField] private CharacterView _characterViewController;
+    [SerializeField] private GameObject _pointerPrefab;
 
-    private HealthController _healthController;
+    private Health _health;
 
     private NavMeshAgent _agent;
 
     private DirectionalRotation _rotator;
 
+    private Pointer _pointer;
+
     private Vector3 _targetPosition;
 
-    public float Health => _healthController.CurrentHealth;
+    public float Health => _health.CurrentHealth;
 
-    public float MaxHealth => _healthController.MaxHealth;
+    public float MaxHealth => _health.MaxHealth;
 
     public Vector3 CurrentVelocity => _agent.velocity;
 
@@ -28,7 +33,8 @@ public class Character : MonoBehaviour, IDamagable
         _agent.updateRotation = false;
 
         _rotator = new DirectionalRotation(transform, _rotationSpeed);
-        _healthController = new HealthController(_maxHealth);
+        _health = new Health(_maxHealth);
+        _pointer = new Pointer(_pointerPrefab);
 
         _targetPosition = transform.position;
     }
@@ -36,6 +42,13 @@ public class Character : MonoBehaviour, IDamagable
     private void Update()
     {
         _agent.SetDestination(_targetPosition);
+
+        Vector3 directionToTarget = _targetPosition - transform.position;
+
+        if (directionToTarget.magnitude < MinDistanceToPointer)
+            _pointer.HidePointer();
+        else
+            _pointer.SetPointer(_targetPosition);
 
         if (_agent.velocity == Vector3.zero)
             return;
@@ -48,9 +61,9 @@ public class Character : MonoBehaviour, IDamagable
 
     public void TakeDamage(float damage)
     {
-        _healthController.TakeDamage(damage);
+        _health.TakeDamage(damage);
 
-        if (_healthController.CurrentHealth <= 0)
+        if (_health.CurrentHealth <= 0)
         {
             _characterViewController.PlayDieAnimation();
         }

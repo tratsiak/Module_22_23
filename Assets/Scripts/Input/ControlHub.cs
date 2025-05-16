@@ -6,13 +6,11 @@ public class ControlHub : MonoBehaviour
 
     [SerializeField] private LayerMask _walkableMask;
 
-    [SerializeField] private GameObject _pointerPrefab;
-
     private Controller _controller;
 
     private void Awake()
     {
-        _controller = new PlayerCharacterController(_character, _walkableMask, _pointerPrefab);
+        _controller = new PlayerCharacterController(_character, _walkableMask);
 
         _controller.Enable();
     }
