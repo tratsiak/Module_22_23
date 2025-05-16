@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Mine : MonoBehaviour
@@ -6,19 +7,12 @@ public class Mine : MonoBehaviour
     [SerializeField] private float _explosionDamage;
     [SerializeField] private float _timeToDetonation;
 
-    private float _time;
-
     private bool _isDetonating;
 
     private void Update()
     {
         if (_isDetonating)
-        {
-            _time += Time.deltaTime;
-
-            if (_time > _timeToDetonation)
-                Detonate();
-        }
+            StartCoroutine(Detonate());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,8 +23,10 @@ public class Mine : MonoBehaviour
             _isDetonating = true;
     }
 
-    private void Detonate()
+    private IEnumerator Detonate()
     {
+        yield return new WaitForSeconds(_timeToDetonation);
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius);
 
         foreach (Collider collider in colliders)
