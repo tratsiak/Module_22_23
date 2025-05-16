@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Mine : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem _explosionEffect;
-
     [SerializeField] private float _explosionRadius;
     [SerializeField] private float _explosionDamage;
     [SerializeField] private float _timeToDetonation;
@@ -20,7 +18,6 @@ public class Mine : MonoBehaviour
 
             if (_time > _timeToDetonation)
                 Detonate();
-
         }
     }
 
@@ -34,18 +31,13 @@ public class Mine : MonoBehaviour
 
     private void Detonate()
     {
-        Instantiate(_explosionEffect, transform.position, Quaternion.identity);
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius);
 
         foreach (Collider collider in colliders)
         {
             IDamagable damagableObject = collider.GetComponent<IDamagable>();
 
-            if (damagableObject != null)
-            {
-                damagableObject.TakeDamage(_explosionDamage);
-            }
+            damagableObject?.TakeDamage(_explosionDamage);
         }
 
         Destroy(gameObject);
