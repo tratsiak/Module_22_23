@@ -3096,7 +3096,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotationSpeed: 900
   _maxHealth: 100
-  _characterViewController: {fileID: 1028291108}
   _pointerPrefab: {fileID: 6360870276350665708, guid: c243dcf9284abeb438636c6eef969e55,
     type: 3}
 --- !u!136 &1028291106
@@ -3162,8 +3161,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _controlHub: {fileID: 123974052}
-  _animator: {fileID: 0}
-  _character: {fileID: 1028291104}
 --- !u!1001 &1037386925
 PrefabInstance:
   m_ObjectHideFlags: 0

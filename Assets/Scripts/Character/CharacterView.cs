@@ -12,13 +12,19 @@ public class CharacterView : MonoBehaviour
 
     [SerializeField] private ControlHub _controlHub;
 
-    [SerializeField] private Animator _animator;
+    private Animator _animator;
 
-    [SerializeField] private Character _character;
+    private Character _character;
 
     private float _time;
 
     private bool _isReactionAnimationPlayed;
+
+    private void Awake()
+    {
+        _character = GetComponent<Character>();
+        _animator = GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -34,7 +40,6 @@ public class CharacterView : MonoBehaviour
 
                 _time = 0;
             }
-
         }
 
         float healthPercent = (_character.Health / _character.MaxHealth) * 100f;
@@ -48,23 +53,31 @@ public class CharacterView : MonoBehaviour
             PlayRunningAnimation();
         else
             StopRunningAnimation();
+
+        if (_character.IsTakingDamage)
+        {
+            PlayReactionAnimation();
+        }
+
+        if (_character.Health <= 0)
+        {
+            _controlHub.DisableController();
+            PlayDieAnimation();
+        }
     }
 
-    public void PlayReactionAnimation()
+    private void PlayReactionAnimation()
     {
         _controlHub.DisableController();
 
         _animator.SetTrigger(_isReactionHash);
 
         _isReactionAnimationPlayed = true;
+
+        _character.IsTakingDamage = false;
     }
 
-    public void PlayDieAnimation()
-    {
-        _controlHub.DisableController();
-
-        _animator.SetBool(_isDiedHash, true);
-    }
+    private void PlayDieAnimation() => _animator.SetBool(_isDiedHash, true);
 
     private void PlayRunningAnimation() => _animator.SetBool(_isRunningHash, true);
 

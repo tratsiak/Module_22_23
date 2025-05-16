@@ -8,7 +8,6 @@ public class Character : MonoBehaviour, IDamagable
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _maxHealth;
 
-    [SerializeField] private CharacterView _characterViewController;
     [SerializeField] private GameObject _pointerPrefab;
 
     private Health _health;
@@ -26,6 +25,8 @@ public class Character : MonoBehaviour, IDamagable
     public float MaxHealth => _health.MaxHealth;
 
     public Vector3 CurrentVelocity => _agent.velocity;
+
+    public bool IsTakingDamage { get; set; }
 
     private void Awake()
     {
@@ -63,11 +64,6 @@ public class Character : MonoBehaviour, IDamagable
     {
         _health.TakeDamage(damage);
 
-        if (_health.CurrentHealth <= 0)
-        {
-            _characterViewController.PlayDieAnimation();
-        }
-        else
-            _characterViewController.PlayReactionAnimation();
+        IsTakingDamage = true;
     }
 }
