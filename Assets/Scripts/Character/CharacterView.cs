@@ -7,10 +7,12 @@ public class CharacterView : MonoBehaviour
     private const float TimeToEndReactionAnimation = 1.7f;
 
     private readonly int _isRunningHash = Animator.StringToHash("IsRunning");
+    private readonly int _isJumpingHash = Animator.StringToHash("IsJumping");
     private readonly int _isReactionHash = Animator.StringToHash("IsDamaged");
     private readonly int _isDiedHash = Animator.StringToHash("IsDied");
 
     [SerializeField] private ControlHub _controlHub;
+    [SerializeField] private CharacterJump _characterJump;
 
     private Animator _animator;
 
@@ -54,6 +56,8 @@ public class CharacterView : MonoBehaviour
         else
             StopRunningAnimation();
 
+        PlayJumpAnimation();
+
         if (_character.IsTakingDamage)
         {
             PlayReactionAnimation();
@@ -76,6 +80,8 @@ public class CharacterView : MonoBehaviour
 
         _character.IsTakingDamage = false;
     }
+
+    private void PlayJumpAnimation() => _animator.SetBool(_isJumpingHash, _characterJump.IsJumping);
 
     private void PlayDieAnimation() => _animator.SetBool(_isDiedHash, true);
 
